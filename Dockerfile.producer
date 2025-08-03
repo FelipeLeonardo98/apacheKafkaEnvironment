@@ -1,0 +1,16 @@
+# Base image
+FROM python:3.12-slim
+
+WORKDIR /sensor_topic
+
+# Copying necessary files
+COPY [".env", "requirements.txt", "sensor_topic/producer.py",  "./"]
+# COPY .env /sensor_topic
+# COPY sensor_topic/producer.py /sensor_topic
+# COPY requirements.txt /sensor_topic
+
+# Install dependencies
+RUN pip install -r requirements.txt
+
+# Run script
+CMD ["python", "producer.py"]

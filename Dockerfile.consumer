@@ -1,0 +1,13 @@
+# Imagem Base
+FROM python:3.12-slim
+
+WORKDIR /sensor_topic
+
+# Copying necessary files
+COPY [".env", "requirements.txt", "sensor_topic/consumer.py",  "./"]
+
+# Install dependencies
+RUN pip install -r requirements.txt
+
+# Rodando script
+CMD ["python", "consumer.py"]

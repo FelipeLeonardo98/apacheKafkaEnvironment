@@ -1,0 +1,41 @@
+networks:
+  kafka-network:
+    external: true
+
+services:
+  tutorial_postgresql:
+    image: postgres:14
+    hostname: tutorial_postgresql
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: "tutorial_conduktor-console"
+      POSTGRES_USER: "conduktor"
+      POSTGRES_PASSWORD: "some_password"
+      POSTGRES_HOST_AUTH_METHOD: "scram-sha-256"
+    networks:
+      - kafka-network
+
+  tutorial_conduktor-console:
+    image: conduktor/conduktor-console:1.35.1
+    ports:
+      - "${CONDUKTOR_PORT}:8080"
+    volumes:
+      - conduktor_data:/var/conduktor
+    environment:
+      # Local admin credentials
+      CDK_ADMIN_EMAIL: "${CONDUKTOR_ADMIN_EMAIL}"
+      CDK_ADMIN_PASSWORD: "${CONDUKTOR_ADMIN_PASSWORD}"
+      CDK_DATABASE_URL: "postgresql://conduktor:some_password@tutorial_postgresql:5432/tutorial_conduktor-console"
+      CDK_CLUSTERS_0_ID: "default"
+      CDK_CLUSTERS_0_NAME: "My Local Kafka Cluster"
+      CDK_CLUSTERS_0_COLOR: "#0013E7"
+      CDK_CLUSTERS_0_BOOTSTRAPSERVERS: "kafka:${KAFKA_INTERNAL_PORT}"
+      #CDK_AUTH_LOCALUSERS_0_EMAIL: "email_of_local_user"
+      #CDK_AUTH_LOCALUSERS_0_PASSWORD: "password_of_local_user"
+    networks:
+      - kafka-network
+    
+volumes:
+  pg_data: {}
+  conduktor_data: {}

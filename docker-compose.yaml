@@ -33,6 +33,22 @@ services:
     networks:
       - kafka-network
 
+####################################### Schema Registry ###################################################
+  schema-registry-server:
+    image: confluentinc/cp-schema-registry
+    hostname: schema-registry-server
+    container_name: schema-registry-server
+    depends_on:
+      - zookeeper
+      - kafka
+    ports:
+      - "${SCHEMA_REGISTRY_PORT}:8081"
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry-server
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'kafka:${KAFKA_INTERNAL_PORT}'
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:${SCHEMA_REGISTRY_PORT}
+    networks:
+      - kafka-network
 ####################################### Streaming sensor containers  #######################################
 
   sensor_interactive_producer:

@@ -31,6 +31,7 @@ services:
       CDK_CLUSTERS_0_NAME: "My Local Kafka Cluster"
       CDK_CLUSTERS_0_COLOR: "#0013E7"
       CDK_CLUSTERS_0_BOOTSTRAPSERVERS: "kafka:${KAFKA_INTERNAL_PORT}"
+      CDK_CLUSTERS_0_SCHEMAREGISTRY_URL: "http://schema-registry-server:${SCHEMA_REGISTRY_PORT}"
       #CDK_AUTH_LOCALUSERS_0_EMAIL: "email_of_local_user"
       #CDK_AUTH_LOCALUSERS_0_PASSWORD: "password_of_local_user"
     networks:

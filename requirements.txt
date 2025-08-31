@@ -2,3 +2,5 @@ faker==37.1.0
 kafka-python==2.2.15
 dotenv==0.9.9
 confluent-kafka==2.11.0
+confluent-kafka[avro]
+attrs==25.3.0

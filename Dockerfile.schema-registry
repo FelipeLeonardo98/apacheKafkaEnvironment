@@ -1,0 +1,14 @@
+# Imagem Base
+FROM python:3.12-slim
+
+WORKDIR /financial_topic
+# it's our volume now, so, isn't necessary copy the local /financial_topic, 'cause is mirroring
+
+# Copying necessary files
+COPY [".env", "requirements.txt", "./"]
+
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Run script
+CMD ["python transaction_producer.py"]

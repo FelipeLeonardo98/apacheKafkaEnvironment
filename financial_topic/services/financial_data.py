@@ -1,9 +1,6 @@
 import random
 import uuid
 from datetime import datetime
-from typing import Literal
-import logging
-import faker
 from faker.providers import BaseProvider
 from faker import Faker
 
@@ -23,39 +20,42 @@ class CustomProvider(BaseProvider):
         approved_list = ['TRUE', 'FALSE']
         return self.random.choice(approved_list)
     
-    def account_id(self):
+    def get_account_and_category(self):
         account_list = [
-            '',
-            '',
-            '',
-            '',
-            ''
+            'X-100',
+            'X-102',
+            'X-200',
+            'X-202',
+            'X-300',
+            'X-302'
         ]
-        pass
+
+        dict_account_category = {
+            'X-100': 'BASIC',
+            'X-102': 'VIOLET',
+            'X-200': 'VIOLET',
+            'X-202': 'BLACK',
+            'X-300': 'BLACK',
+            'X-302': 'VIOLET'
+        }
+        sorted_account = random.choice(account_list)
+        category_name = dict_account_category.get(sorted_account)
+        
+        return sorted_account, category_name
 
 
-if __name__ == '__main__':
-    log_format = "[%(asctime)s] - [%(name)s] - [%(levelname)s] - %(message)s"
-    logging.basicConfig(level=logging.INFO, format=log_format, datefmt="%Y-%m-%d %H:%M:%S")
+def generate_transaction_bank() -> dict:
+        fake = Faker(['pt_BR'])
+        fake.add_provider(CustomProvider)
+       #generate_transaction_bank(account_id: str, card_category: Literal['BASIC', 'BLACK', 'VIOLET'])
+        sorted_account, category_name = fake.get_account_and_category()
 
-    fake = Faker(['pt_BR'])
-    fake.add_provider(CustomProvider)
-
-
-    def generate_transaction_bank(account_id: str, card_category: Literal['BASIC', 'BLACK', 'VIOLET']):
         return {
-            'id': uuid.uuid4(),
+            'transaction_id': str(uuid.uuid4()),
+            'account_id': sorted_account,
             'type': fake.transaction_type(),
-            'card_category': card_category,
+            'card_category': category_name,
             'card_number': fake.credit_card_number(),
             'is_approved': fake.return_boolean(),
-            'account_id': account_id,
             'datetime': datetime.now().isoformat()
         }
-
-    logging.info("STARTING THE INGESTION FOR `CARD-TRANSACTIONS-TOPIC`")
-    account_id = input("account_id:")
-    card_category = input("card_category:")
-    data = generate_transaction_bank(account_id=account_id, card_category=card_category)
-    logging.info(f"data: {data}")
-

@@ -1,2 +1,4 @@
 Pipfile.lock
 *kafka_env*
+financial_topic/schema-evolution.txt
+*__pycache__*

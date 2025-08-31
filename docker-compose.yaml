@@ -101,7 +101,25 @@ services:
       - kafka-network
     depends_on:
       - kafka
-  
+
+####################################### Financial Topic #############################
+  financial_topic_producer:
+    container_name: financial_interactive_producer
+    build:
+      context: .
+      dockerfile: Dockerfile.schema-registry
+    volumes:
+      - ./financial_topic:/financial_topic   # ← folder mirroring
+    # for interactive access
+    stdin_open: true
+    tty: true
+    profiles:
+      - financial
+    networks:
+      - kafka-network
+    depends_on:
+      - kafka
+      - schema-registry-server
 ####################################### Conduktor containers  #######################################
   tutorial_postgresql:
     hostname: tutorial_postgresql

@@ -10,12 +10,15 @@ load_dotenv()
 KAFKA_INTERNAL_PORT = os.getenv("KAFKA_INTERNAL_PORT")
 
 # Retry until Kafka is ready
+"""
 for _ in range(10):
     try:
         print(f"TRYING TO CONNECT TO KAFKA_INTERNAL_PORT: {KAFKA_INTERNAL_PORT}")
         producer = KafkaProducer(
-            bootstrap_servers=f'kafka:{KAFKA_INTERNAL_PORT}',
-            api_version=(3, 8, 0),
+            #bootstrap_servers=f'kafka:{KAFKA_INTERNAL_PORT}',
+            bootstrap_servers='localhost:29093',
+            # NoBrokersAvailable
+            #api_version=(3, 8, 0),
             value_serializer=lambda v: json.dumps(v).encode('utf-8'), # Serializar a mensagem para JSON
             key_serializer=lambda k: k.encode('utf-8') # Serializar a mensagem para JSON
         )
@@ -25,7 +28,10 @@ for _ in range(10):
         time.sleep(3)
 else:
     raise Exception("Kafka broker not available")
+"""
 
+
+    
 headers = [("metadata_example_one", b"xxx"), ("metadata_example_two", b"yyy")]
 
 sensors = {
@@ -63,10 +69,24 @@ def interactive_generate_sensor_data(sensor_id: str, temperature: float):
 if __name__ == '__main__':
     log_format = "[%(asctime)s] - [%(name)s] - [%(levelname)s] - %(message)s"
     logging.basicConfig(level=logging.INFO, format=log_format, datefmt="%Y-%m-%d %H:%M:%S")
+    try:
+        print(f"TRYING TO CONNECT TO KAFKA_INTERNAL_PORT: {KAFKA_INTERNAL_PORT}")
+        producer = KafkaProducer(
+            #bootstrap_servers=f'kafka:{KAFKA_INTERNAL_PORT}',
+            bootstrap_servers='localhost:29093',
+            # NoBrokersAvailable and KafkaConnectionError: Unable to determine broker version.
+            api_version=(3, 8, 0),
+            value_serializer=lambda v: json.dumps(v).encode('utf-8'), # Serializar a mensagem para JSON
+            key_serializer=lambda k: k.encode('utf-8') # Serializar a mensagem para JSON
+        )
+    
+    except Exception as e:
+        print(f"Kafka not ready yet, retrying... {e}")
 
     topic = 'temperature_sensor_topic'
     time.sleep(1)
     while True:
+
         sensor_id = input("sensor_id: ")
         temperature = input("temperature: ")
         data = interactive_generate_sensor_data(sensor_id, temperature)

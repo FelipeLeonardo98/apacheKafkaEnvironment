@@ -8,6 +8,7 @@ dotenv = "*"
 faker = "==37.1.0"
 kafka-python = "*"
 confluent-kafka = "*"
+streamlit = "==1.49.1"
 
 [dev-packages]
 

@@ -17,8 +17,11 @@ services:
     image: bitnami/kafka:latest
     restart: on-failure
     ports:
-      - "${KAFKA_INTERNAL_PORT}:9092"
-      - "${KAFKA_EXTERNAL_PORT}:29092"  # External access from the host
+      - "${KAFKA_INTERNAL_PORT}:${KAFKA_INTERNAL_PORT}"
+      - "${KAFKA_EXTERNAL_PORT}:${KAFKA_EXTERNAL_PORT}"
+    # ports:
+    #  - "${KAFKA_INTERNAL_PORT}:9092"
+    #   - "${KAFKA_EXTERNAL_PORT}:29092"  # External access from the host
     environment:
       - KAFKA_CFG_BROKER_ID=1
       - KAFKA_CFG_LISTENERS=PLAINTEXT://0.0.0.0:9093,EXTERNAL://0.0.0.0:29093

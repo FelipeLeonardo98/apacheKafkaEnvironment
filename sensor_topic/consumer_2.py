@@ -13,7 +13,7 @@ KAFKA_INTERNAL_PORT = os.getenv("KAFKA_INTERNAL_PORT")
 consumer = KafkaConsumer(
     'temperature_sensor_topic',  # The Kafka topic to consume from
     api_version=(3, 8, 0),
-    bootstrap_servers=f'kafka:{KAFKA_INTERNAL_PORT}',
+    bootstrap_servers=f'localhost:29093',
     auto_offset_reset='earliest',  # Start reading at the beginning of the topic if no offset is found
     enable_auto_commit=False,
     group_id=f'temperature_sensor_consumer_group_{str(uuid.uuid4())}',

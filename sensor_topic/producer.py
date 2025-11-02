@@ -13,7 +13,7 @@ KAFKA_INTERNAL_PORT = os.getenv("KAFKA_INTERNAL_PORT")
 # Initialize Faker and KafkaProducer
 fake = Faker()
 producer = KafkaProducer(
-    bootstrap_servers=f'kafka:{KAFKA_INTERNAL_PORT}',
+    bootstrap_servers=f'localhost:29093',
     api_version=(3, 8, 0),
     value_serializer=lambda v: json.dumps(v).encode('utf-8'),  # Serializar a mensagem para JSON
     key_serializer=lambda k: k.encode('utf-8') # Serializar a mensagem para JSON

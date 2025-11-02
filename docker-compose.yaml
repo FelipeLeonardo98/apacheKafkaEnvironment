@@ -104,7 +104,7 @@ services:
 
 ####################################### Financial Topic #############################
   financial_topic_producer:
-    container_name: financial_interactive_producer
+    container_name: financial_interactive_consumer
     build:
       context: .
       dockerfile: Dockerfile.schema-registry
